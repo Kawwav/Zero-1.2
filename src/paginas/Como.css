@@ -1,0 +1,213 @@
+/* ── Como Funciona ──────────────────────────────────────────── */
+.como {
+  position: relative;
+  width: 100%;
+  background: #EDEAE3;
+  padding: clamp(60px, 10vh, 100px) clamp(32px, 8vw, 120px);
+  box-sizing: border-box;
+}
+
+/* ── Header ── */
+.como-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 40px;
+  margin-bottom: clamp(56px, 9vh, 96px);
+}
+
+.como-eyebrow {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #7A8A7A;
+  margin: 0 0 14px;
+}
+
+.como-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 700;
+  color: #0D2B0D;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.como-title.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.como-title em {
+  font-style: normal;
+  -webkit-text-stroke: 2px #0D2B0D;
+  color: transparent;
+}
+
+.como-desc {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(13, 43, 13, 0.55);
+  margin: 0;
+  align-self: end;
+
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.9s ease 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+
+.como-desc.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Steps list ── */
+.como-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(13, 43, 13, 0.12);
+}
+
+.como-item {
+  display: grid;
+  grid-template-columns: 72px 1fr 1fr;
+  align-items: start;
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(32px, 5vh, 52px) 0;
+  border-bottom: 1px solid rgba(13, 43, 13, 0.12);
+  position: relative;
+
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.como-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.como-item:nth-child(1) { transition-delay: 0.05s; }
+.como-item:nth-child(2) { transition-delay: 0.15s; }
+.como-item:nth-child(3) { transition-delay: 0.25s; }
+.como-item:nth-child(4) { transition-delay: 0.35s; }
+
+/* Número */
+.como-item__num {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: rgba(13, 43, 13, 0.28);
+  padding-top: 6px;
+}
+
+/* Nome da etapa */
+.como-item__name {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(24px, 3.5vw, 48px);
+  font-weight: 700;
+  color: #0D2B0D;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.como-item:hover .como-item__name {
+  color: #067406;
+}
+
+/* Barra verde animada */
+.como-item__bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background:  #067406;
+  width: 0;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.como-item:hover .como-item__bar {
+  width: 100%;
+}
+
+/* Descrição */
+.como-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.como-item__desc {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(13px, 1.2vw, 15px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(13, 43, 13, 0.55);
+  margin: 0;
+}
+
+/* Tag de duração */
+.como-item__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3A6A3A;
+  background: #0674060e;
+  border: 1px solid #067406;
+  border-radius: 2px;
+  padding: 5px 10px;
+  width: fit-content;
+}
+
+.como-item__tag-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #067406;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .como-header {
+    grid-template-columns: 1fr;
+  }
+  .como-item {
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .como-item__body {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 580px) {
+  .como-item {
+    grid-template-columns: 1fr;
+  }
+  .como-item__num {
+    padding-top: 0;
+  }
+}

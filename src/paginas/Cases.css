@@ -1,0 +1,299 @@
+/* ── Cases Section ──────────────────────────────────────────── */
+.cases {
+  position: relative;
+  width: 100%;
+  background: #EDEAE3;
+  padding: clamp(60px, 10vh, 100px) clamp(32px, 8vw, 120px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cases-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: clamp(48px, 7vh, 80px);
+  gap: 24px;
+}
+
+.cases-eyebrow {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #7A8A7A;
+  margin: 0 0 14px;
+}
+
+.cases-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 700;
+  color: #0D2B0D;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cases-title.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cases-title em {
+  font-style: normal;
+  -webkit-text-stroke: 2px #0D2B0D;
+  color: transparent;
+}
+
+.cases-counter {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: rgb(13, 43, 13);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-bottom: 6px;
+}
+
+/* ── Grid ───────────────────────────────────────────────────── */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.case-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #1A3D1A;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.case-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.case-card:nth-child(1) { transition-delay: 0.05s; }
+.case-card:nth-child(2) { transition-delay: 0.15s; }
+.case-card:nth-child(3) { transition-delay: 0.25s; }
+
+/* ── Card image placeholder (cor por brand) ── */
+.case-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.55) saturate(0.8);
+}
+
+.case-card:hover .case-card__bg {
+  transform: scale(1.06);
+}
+
+/* Overlay gradiente */
+.case-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13, 43, 13, 0.98) 0%,
+    rgba(13, 43, 13, 0.4) 55%,
+    transparent 100%
+  );
+  transition: background 0.4s ease;
+}
+
+.case-card:hover .case-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(13, 43, 13, 0.99) 0%,
+    rgba(13, 43, 13, 0.7) 60%,
+    rgba(13, 43, 13, 0.2) 100%
+  );
+}
+
+/* ── Card content ── */
+.case-card__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px 24px;
+}
+
+.case-card__tag {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #9BFA00;
+  margin: 0 0 10px;
+}
+
+.case-card__brand {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 700;
+  color: #EDEAE3;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.case-card__local {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(237, 234, 227, 0.45);
+  margin: 0 0 20px;
+}
+
+/* Stats dentro do card */
+.case-card__stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.case-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.case-stat__val {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 700;
+  color: #9BFA00;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.case-stat__label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 227, 0.4);
+}
+
+/* ── Depoimento ── */
+.case-card__quote {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s ease 0.1s;
+}
+
+.case-card:hover .case-card__quote {
+  max-height: 120px;
+  opacity: 1;
+}
+
+.case-card__quote-text {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(237, 234, 227, 0.6);
+  margin: 16px 0 0;
+  border-left: 2px solid #9BFA00;
+  padding-left: 12px;
+}
+
+.case-card__quote-author {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 227, 0.35);
+  margin: 8px 0 0 14px;
+}
+
+/* ── Linha inferior ── */
+.cases-footer {
+  margin-top: clamp(40px, 6vh, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(13, 43, 13, 0.12);
+  padding-top: 24px;
+}
+
+.cases-footer-note {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: rgb(13, 43, 13);
+}
+
+.cases-cta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0D2B0D;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.3s ease, color 0.3s ease;
+}
+
+.cases-cta:hover {
+  gap: 14px;
+  color: #2A6A2A;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cases-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .case-card:nth-child(3) {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 7;
+  }
+}
+
+@media (max-width: 580px) {
+  .cases-grid {
+    grid-template-columns: 1fr;
+  }
+  .case-card:nth-child(3) {
+    grid-column: auto;
+    aspect-ratio: 3 / 4;
+  }
+  .cases-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

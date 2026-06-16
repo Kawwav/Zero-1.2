@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700;1,900&display=swap');
+
+.footer {
+  position: relative;
+  width: 100%;
+  background: #0D2B0D;
+  padding: clamp(60px, 10vh, 100px) clamp(32px, 8vw, 120px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ── Topo: label + título grande ─────────────────────────── */
+.footer-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: clamp(48px, 7vh, 80px);
+}
+
+/* ── Text reveal: wrapper comum a todos os links ─────────── */
+.link-reveal {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+/* Span primário (texto original) */
+.link-reveal .text-primary {
+  display: block;
+  transform: translateY(0) skewY(0deg);
+  opacity: 1;
+  transition:
+    transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity   0.5s ease;
+}
+
+/* Span alternativo (fonte diferente, começa embaixo) */
+.link-reveal .text-alt {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(110%) skewY(6deg);
+  opacity: 0;
+  transition:
+    transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity   0.5s ease;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+}
+
+/* Hover: primário inclina e sobe, alternativo endireita e sobe */
+.link-reveal:hover .text-primary {
+  transform: translateY(-110%) skewY(-6deg);
+  opacity: 0;
+}
+
+.link-reveal:hover .text-alt {
+  transform: translateY(0) skewY(0deg);
+  opacity: 1;
+}
+
+/* ── Eyebrow ──────────────────────────────────────────────── */
+.footer-eyebrow {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 227, 0.55);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 8px;
+  margin-top: 6px;
+  transition: color 0.3s ease;
+}
+
+.footer-eyebrow::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 234, 227, 0.3);
+  transition: background 0.3s ease;
+}
+
+.footer-eyebrow:hover {
+  color: #9BFA00;
+}
+
+.footer-eyebrow:hover::after {
+  background: #9BFA00;
+}
+
+.footer-eyebrow .text-alt {
+  letter-spacing: 0.1em;
+  text-transform: none;
+  font-size: 13px;
+}
+
+/* ── Título ───────────────────────────────────────────────── */
+.footer-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(40px, 7vw, 90px);
+  font-weight: 800;
+  color: #EDEAE3;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-align: right;
+  margin: 0;
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer-title.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-title.hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.footer-title em {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 900;
+  color: #9BFA00;
+  letter-spacing: -0.01em;
+}
+
+/* ── Divisória ────────────────────────────────────────────── */
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 234, 227, 0.12);
+  margin-bottom: clamp(48px, 7vh, 80px);
+}
+
+/* ── Rodapé inferior: e-mail + social ────────────────────── */
+.footer-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* ── E-mail ───────────────────────────────────────────────── */
+.footer-email {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 600;
+  color: #EDEAE3;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-bottom: 8px;
+  display: inline-block;
+
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.9s ease 0.1s,
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
+    color 0.3s ease;
+}
+
+.footer-email::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 234, 227, 0.3);
+  transition: background 0.3s ease;
+}
+
+.footer-email.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-email.hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.footer-email:hover {
+  color: #9BFA00;
+}
+
+.footer-email:hover::after {
+  background: #9BFA00;
+}
+
+.footer-email .link-reveal {
+  line-height: 1;
+}
+
+.footer-email .text-alt {
+  font-size: 0.9em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #9BFA00;
+}
+
+/* ── Social ───────────────────────────────────────────────── */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 160px;
+}
+
+.footer-social-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 227, 0.35);
+  margin-bottom: 4px;
+}
+
+.footer-social-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.footer-social-list li {
+  border-top: 1px solid rgba(237, 234, 227, 0.12);
+  text-align: right;
+  padding: 10px 0;
+}
+
+.footer-social-list a {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 227, 0.7);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-social-list a:hover {
+  color: #9BFA00;
+}
+
+.footer-social-list .text-alt {
+  letter-spacing: 0.05em;
+  text-transform: none;
+  font-size: 14px;
+  color: #9BFA00;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-title {
+    text-align: left;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .footer-social {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .footer-social-list li {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-email {
+    font-size: clamp(22px, 7vw, 32px);
+    word-break: break-all;
+  }
+}

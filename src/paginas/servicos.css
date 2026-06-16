@@ -1,0 +1,372 @@
+.servicos {
+  position: relative;
+  width: 100%;
+  background: #EDEAE3;
+  padding: clamp(60px, 10vh, 100px) clamp(32px, 8vw, 120px) clamp(60px, 10vh, 100px);
+  box-sizing: border-box;
+}
+
+/* ── Section title ──────────────────────────────────────────── */
+.servicos1 {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #0D2B0D;
+  text-align: center;
+  margin: 0 0 clamp(40px, 6vh, 72px) 0;
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.servicos1.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.servicos1.hidden {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.servicos-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+.servicos-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(13, 43, 13, 0.18);
+  padding: clamp(24px, 4vh, 44px) 0;
+  cursor: none;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: 
+    opacity 1s ease, 
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.4s ease,
+    background 0.4s ease;
+}
+
+.servicos-item:last-child {
+  border-bottom: 1px solid rgba(13, 43, 13, 0.18);
+}
+
+.servicos-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.servicos-item.hidden {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.servicos-item:hover {
+  padding-top: clamp(32px, 5.5vh, 58px);
+  padding-bottom: clamp(32px, 5.5vh, 58px);
+  padding-left: 18px;
+  padding-right: 18px;
+  background: rgba(13, 43, 13, 0.04);
+}
+
+.servicos-item:nth-child(1) { transition-delay: 0.1s; }
+.servicos-item:nth-child(2) { transition-delay: 0.2s; }
+.servicos-item:nth-child(3) { transition-delay: 0.3s; }
+.servicos-item:nth-child(4) { transition-delay: 0.4s; }
+
+.servicos-item-name {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 90px;
+  font-weight: 700;
+  color: #0D2B0D;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+  transition: color 0.3s ease, letter-spacing 0.4s ease;
+}
+
+.servicos-item:hover .servicos-item-name {
+  color: #9BFA00;
+  letter-spacing: 0.02em;
+}
+
+.servicos-item-number {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(11px, 1vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(13, 43, 13, 0.35);
+  align-self: center;
+  flex-shrink: 0;
+  margin-left: 24px;
+  transition: color 0.3s ease;
+}
+
+.servicos-item:hover .servicos-item-number {
+  color: rgba(155, 250, 0, 0.7);
+}
+
+/* ── Cursor image ───────────────────────────────────────────── */
+.servicos-cursor-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 360px;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+  border-radius: 4px;
+  transform: translate(calc(var(--cx) - 50%), calc(var(--cy) - 50%));
+  clip-path: inset(50% 0 50% 0);
+  transition:
+    clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.08s linear;
+}
+
+.servicos-cursor-img.active {
+  clip-path: inset(0% 0 0% 0);
+}
+
+.servicos-cursor-img__inner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Modal backdrop ─────────────────────────────────────────── */
+.svc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background: rgba(1, 25, 1, 0);
+  animation: backdropIn 0.5s ease forwards;
+}
+
+.svc-modal-backdrop.closing {
+  animation: backdropOut 0.5s ease forwards;
+}
+
+@keyframes backdropIn {
+  to { background: rgba(1, 25, 1, 0.72); }
+}
+
+@keyframes backdropOut {
+  from { background: rgba(1, 25, 1, 0.72); }
+  to   { background: rgba(1, 25, 1, 0); }
+}
+
+/* ── Modal panel — slides in from right ────────────────────── */
+.svc-modal {
+  position: relative;
+  width: min(520px, 100vw);
+  height: 100vh;
+  background: #0D2B0D;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(100%);
+  animation: panelIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.svc-modal.closing {
+  animation: panelOut 0.55s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes panelIn {
+  to { transform: translateX(0); }
+}
+
+@keyframes panelOut {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
+/* ── Close button ───────────────────────────────────────────── */
+.svc-modal-close {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(155, 250, 0, 0.3);
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.svc-modal-close:hover {
+  background: rgba(155, 250, 0, 0.1);
+  border-color: #9BFA00;
+}
+
+.svc-modal-close span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: #9BFA00;
+  transition: transform 0.3s ease;
+}
+
+.svc-modal-close span:first-child {
+  transform: rotate(45deg) translateY(3.5px);
+}
+
+.svc-modal-close span:last-child {
+  transform: rotate(-45deg) translateY(-3.5px);
+}
+
+/* ── Image block — top 55% ──────────────────────────────────── */
+.svc-modal-img-wrap {
+  position: relative;
+  flex: 0 0 55%;
+  overflow: hidden;
+}
+
+.svc-modal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(20%);
+  animation: imgReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+@keyframes imgReveal {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+
+.svc-modal-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    #0D2B0D 100%
+  );
+}
+
+.svc-modal-number {
+  position: absolute;
+  bottom: 16px;
+  left: 28px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: rgba(155, 250, 0, 0.55);
+  text-transform: uppercase;
+}
+
+/* ── Text body — bottom 45% ─────────────────────────────────── */
+.svc-modal-body {
+  flex: 1;
+  padding: 32px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: bodyFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+@keyframes bodyFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.svc-modal-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(155, 250, 0, 0.55);
+  margin: 0 0 10px;
+}
+
+.svc-modal-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(36px, 7vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #EDEAE3;
+  margin: 0;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.svc-modal-divider {
+  width: 32px;
+  height: 2px;
+  background: #9afa0000;
+  margin: 20px 0;
+}
+
+.svc-modal-desc {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(237, 234, 227, 0.6);
+  margin: 0 0 28px;
+  max-width: 360px;
+}
+
+.svc-modal-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0D2B0D;
+  background: #9BFA00;
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 2px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.svc-modal-cta:hover {
+  background: #1c3f1b;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .servicos-item-name {
+    font-size: clamp(28px, 10vw, 48px);
+  }
+
+  .servicos-cursor-img {
+    display: none;
+  }
+
+  .svc-modal {
+    width: 100vw;
+  }
+}

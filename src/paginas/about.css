@@ -1,0 +1,180 @@
+.sobre {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #EDEAE3;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(60px, 10vh, 120px) clamp(32px, 8vw, 120px);
+  box-sizing: border-box;
+}
+
+.sobre-number {
+  font-size: 240px;
+  font-weight: 700;
+  color: rgba(13, 43, 13, 0.068);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  margin-bottom: 50px;
+
+  /* entra da direita */
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.9s ease 0.4s, transform 0.9s ease 0.4s;
+}
+
+.sobre-number.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sobre-number.hidden {
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.sobre-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 40px;
+}
+
+/* ── Headline — vem da esquerda ─────────────────────────────── */
+.sobre-headline {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(40px, 6vw, 90px);
+  font-weight: 700;
+  color: #0D2B0D;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+
+  opacity: 0;
+  transform: translateX(-80px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.sobre-headline.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sobre-headline.hidden {
+  opacity: 0;
+  transform: translateX(-80px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* ── Aside — vem da direita ─────────────────────────────────── */
+.sobre-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s;
+}
+
+.sobre-aside.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sobre-aside.hidden {
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.sobre-desc {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #0D2B0D;
+  text-align: right;
+  margin: 0;
+  max-width: 340px;
+}
+
+.sobre-cta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #0D2B0D;
+  text-decoration: none;
+  padding-bottom: 2px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.sobre-cta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #0D2B0D;
+  transition: background 0.3s ease;
+}
+
+.sobre-cta:hover {
+  color: #9BFA00;
+}
+
+.sobre-cta:hover::after {
+  background: #9BFA00;
+}
+
+.sobre-info-footer {
+  position: absolute;
+  bottom: clamp(24px, 4vw, 48px);
+  right: clamp(24px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sobre-linha-final {
+  position: absolute;
+  bottom: 30px;
+  width: 90%;
+  height: 1px;
+  background-color: rgba(13, 43, 13, 0.2);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sobre-inner {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .sobre-aside,
+  .sobre-desc,
+  .sobre-cta {
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  .sobre-aside {
+    align-items: flex-start;
+  }
+}
