@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .servicos {
   position: relative;
   width: 100%;
@@ -6,10 +12,9 @@
   box-sizing: border-box;
 }
 
-/* ── Section title ──────────────────────────────────────────── */
 .servicos1 {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 80px;
+  font-size: clamp(28px, 7vw, 80px);
   font-weight: 700;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -44,6 +49,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 8px;
   border-top: 1px solid rgba(13, 43, 13, 0.18);
   padding: clamp(24px, 4vh, 44px) 0;
   cursor: none;
@@ -86,13 +93,14 @@
 
 .servicos-item-name {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 90px;
+  font-size: clamp(26px, 8vw, 90px);
   font-weight: 700;
   color: #0D2B0D;
   line-height: 1;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   margin: 0;
+  overflow-wrap: anywhere;
   transition: color 0.3s ease, letter-spacing 0.4s ease;
 }
 
@@ -117,7 +125,19 @@
   color: rgba(155, 250, 0, 0.7);
 }
 
-/* ── Cursor image ───────────────────────────────────────────── */
+/* Dispositivos sem mouse real (touch/tablets): a imagem que segue o
+   cursor não faz sentido e pode ficar "presa" na tela */
+@media (hover: none), (pointer: coarse) {
+  .servicos-item {
+    cursor: pointer;
+  }
+
+  .servicos-cursor-img {
+    display: none;
+  }
+}
+
+
 .servicos-cursor-img {
   position: absolute;
   top: 0;
@@ -127,7 +147,13 @@
   pointer-events: none;
   z-index: 100;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 7.5px;
+  background: #0D2B0D;
+  box-sizing: border-box;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translate(calc(var(--cx) - 50%), calc(var(--cy) - 50%));
   clip-path: inset(50% 0 50% 0);
   transition:
@@ -144,9 +170,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 15px;
 }
 
-/* ── Modal backdrop ─────────────────────────────────────────── */
 .svc-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -187,7 +213,6 @@
   }
 }
 
-/* ── Wrapper — sobe do chão junto com o boneco ────────────────── */
 .svc-modal-wrap {
   position: relative;
   padding-top: clamp(90px, 13vh, 150px);
@@ -208,7 +233,6 @@
   to   { transform: translateY(-120%); }
 }
 
-/* ── Modal panel — retângulo verde ────────────────────────────── */
 .svc-modal {
   position: relative;
   width: min(1400px, 92vw);
@@ -232,7 +256,176 @@
   pointer-events: none;
 }
 
-/* ── Close button ───────────────────────────────────────────── */
+
+.svc-modal-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: clamp(64px, 9vh, 96px) clamp(32px, 6vw, 80px) clamp(40px, 6vh, 64px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vh, 48px);
+  color: #EDEAE3;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.svc-modal-top {
+  display: flex;
+  justify-content: center;
+}
+
+.svc-modal-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+
+.svc-modal-tag {
+  background: transparent;
+  border: 1px solid rgba(155, 250, 0, 0.4);
+  color: #9BFA00;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 7px 14px;
+  border-radius: 999px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.svc-modal-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.svc-modal-eyebrow {
+  font-size: clamp(12px, 1.4vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color:#9BFA00;
+
+}
+
+.svc-modal-name {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 88px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  color: #9BFA00;
+}
+
+.svc-modal-desc {
+  margin: 0;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.55;
+  color: rgba(237, 234, 227, 0.75);
+  max-width: 560px;
+}
+
+.svc-modal-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 234, 227, 0.15);
+}
+
+.svc-modal-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 3vw, 40px);
+}
+
+.svc-modal-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 1px solid rgba(237, 234, 227, 0.15);
+  padding-left: clamp(14px, 1.6vw, 22px);
+}
+
+.svc-modal-step:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.svc-modal-step-n {
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 800;
+  color: #9BFA00;
+  line-height: 1;
+}
+
+.svc-modal-step-title {
+  margin: 0;
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 700;
+  color: #EDEAE3;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.svc-modal-step-desc {
+  margin: 0;
+  font-size: clamp(12px, 1.2vw, 13.5px);
+  line-height: 1.5;
+  color: rgba(237, 234, 227, 0.55);
+}
+
+.svc-modal-step-time {
+  margin-top: auto;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(155, 250, 0, 0.7);
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .svc-modal-steps {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 24px;
+  }
+  .svc-modal-step:nth-child(3) {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .svc-modal-inner {
+    padding: 56px 20px 32px;
+    gap: 24px;
+  }
+  .svc-modal-steps {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+  .svc-modal-step {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(237, 234, 227, 0.15);
+    padding-top: 16px;
+  }
+  .svc-modal-step:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+
 .svc-modal-close {
   position: absolute;
   top: 28px;
@@ -273,12 +466,7 @@
   transform: rotate(-45deg) translateY(-3.5px);
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .servicos-item-name {
-    font-size: clamp(28px, 10vw, 48px);
-  }
-
   .servicos-cursor-img {
     display: none;
   }
@@ -295,5 +483,26 @@
     width: 94vw;
     height: min(55vh, 420px);
     border-radius: 16px;
+  }
+}
+
+/* Celular deitado (viewport curto): dá mais espaço útil ao modal */
+@media (max-height: 480px) and (orientation: landscape) {
+  .svc-modal-wrap {
+    padding-top: 32px;
+  }
+
+  .svc-modal-mascot {
+    width: 64px;
+  }
+
+  .svc-modal {
+    width: 92vw;
+    height: min(88vh, 500px);
+  }
+
+  .svc-modal-inner {
+    padding: 40px clamp(20px, 5vw, 48px) 24px;
+    gap: 16px;
   }
 }

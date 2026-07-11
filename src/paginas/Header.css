@@ -1,3 +1,10 @@
+/* ── Reset básico p/ garantir responsividade ───────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* ── Loading Screen ─────────────────────────────────────────── */
 .loading-screen {
   position: fixed;
@@ -5,11 +12,14 @@
   left: 0;
   width: 100%;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); /* fallback via JS p/ navegadores sem dvh */
+  height: 100dvh;
   background: #9BFA00;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  overflow: hidden; /* impede que o texto "vaze" e cause scroll horizontal */
   will-change: transform;
 }
 
@@ -19,6 +29,7 @@
   align-items: center;
   pointer-events: none;
   padding: 0.5em 0;
+  width: 100%;
 }
 
 .loading-text {
@@ -26,8 +37,9 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0 .3em;
-  padding: 0 2rem;
-  max-width: 80vw;
+  padding: 0 1.5rem;
+  width: 100%;
+  max-width: 92vw;
 }
 
 .loading-text .span-outer {
@@ -61,6 +73,9 @@
   position: relative;
   width: 100%;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  height: 100dvh;
+  min-height: 480px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -149,4 +164,96 @@
 .hero-subtitle .brand-accent {
   color: #9BFA00;
   font-weight: 700;
+}
+
+/* ── Responsividade ──────────────────────────────────────────── */
+
+/* Tablets e telas médias */
+@media (max-width: 900px) {
+  .hero-content {
+    max-width: 640px;
+    padding: 0 clamp(20px, 5vw, 48px);
+  }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+  .hero-logo {
+    top: 16px;
+    left: 16px;
+    height: 32px;
+  }
+
+  .hero-content {
+    padding: 0 20px;
+  }
+
+  .hero-title {
+    font-size: clamp(24px, 7vw, 34px);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(13px, 4vw, 16px);
+    line-height: 1.5;
+  }
+
+  .loading-text {
+    padding: 0 1rem;
+    gap: 0 .2em;
+  }
+
+  .loading-text .span-inner {
+    font-size: clamp(18px, 7vw, 32px);
+  }
+}
+
+/* Celulares bem pequenos (largura <= 360px) */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: clamp(20px, 8vw, 28px);
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+  }
+
+  .loading-text {
+    padding: 0 0.75rem;
+    gap: 0 .15em;
+  }
+
+  .loading-text .span-inner {
+    font-size: clamp(16px, 8vw, 26px);
+  }
+}
+
+/* Orientação paisagem em telas curtas (celular deitado) */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero-logo {
+    top: 10px;
+    left: 12px;
+    height: 28px;
+  }
+
+  .hero-content {
+    padding: 0 32px;
+  }
+
+  .hero-title {
+    font-size: clamp(18px, 4vw, 28px);
+    margin-bottom: 8px;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(11px, 2.5vw, 15px);
+  }
+}
+
+/* Telas grandes: evita que o texto fique minúsculo em relação ao espaço */
+@media (min-width: 1600px) {
+  .hero-content {
+    max-width: 1100px;
+  }
 }

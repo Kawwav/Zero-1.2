@@ -1,4 +1,10 @@
 /* ── Como Funciona ──────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .como {
   position: relative;
   width: 100%;
@@ -12,7 +18,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
-  gap: 40px;
+  gap: clamp(24px, 4vw, 40px);
   margin-bottom: clamp(64px, 11vh, 120px);
 }
 
@@ -208,5 +214,23 @@
   .como-item {
     border-left: none;
     padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Celulares bem pequenos */
+@media (max-width: 380px) {
+  .como {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .como-item__num {
+    margin-bottom: 20px;
+  }
+  .como-item__name {
+    margin-bottom: 10px;
+  }
+  .como-item__desc {
+    margin-bottom: 20px;
   }
 }
