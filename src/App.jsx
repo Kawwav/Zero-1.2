@@ -8,6 +8,12 @@ import SobreNos from './paginas/sobre';
 import Footer from './assets/footer';
 import "./App.css";
 
+//git add .
+//git commit -m "..."
+//git push origin main
+
+//npm run deploy
+
 export default function App() {
   const [view, setView] = useState("home");       
   const [panelState, setPanelState] = useState("idle");

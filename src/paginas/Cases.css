@@ -67,21 +67,26 @@
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  gap: clamp(24px, 3vw, 48px);
 }
 
 /* ── Card ───────────────────────────────────────────────────── */
 .case-card {
   position: relative;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #1A3D1A;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 4 / 5;
+  border-radius: 22px;
+  background: #E2E1DC;
+  border: 1px solid rgba(13, 43, 13, 0.08);
   cursor: pointer;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(60px);
   transition:
     opacity 0.8s ease,
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s ease;
 }
 
 .case-card.visible {
@@ -89,151 +94,129 @@
   transform: translateY(0);
 }
 
+.case-card:hover {
+  box-shadow: 0 18px 40px rgba(13, 43, 13, 0.12);
+}
+
 .case-card:nth-child(1) { transition-delay: 0.05s; }
 .case-card:nth-child(2) { transition-delay: 0.15s; }
 .case-card:nth-child(3) { transition-delay: 0.25s; }
 
-/* ── Card image placeholder (cor por brand) ── */
-.case-card__bg {
-  position: absolute;
-  inset: 0;
+/* ── Badges no topo ── */
+.case-card__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 22px 0;
+}
+
+.case-card__badge-num {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0D2B0D;
+  background: #FFFFFF;
+  border: 1px solid rgba(13, 43, 13, 0.1);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.case-card__badge-tag {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #EDEAE3;
+  background: #0D2B0D;
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+/* ── Hero: ícone + wordmark ── */
+.case-card__hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 20px;
+}
+
+.case-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: brightness(0.55) saturate(0.8);
+  border: 1px solid rgba(13, 43, 13, 0.1);
 }
 
-.case-card:hover .case-card__bg {
-  transform: scale(1.06);
-}
-
-/* Overlay gradiente */
-.case-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(13, 43, 13, 0.98) 0%,
-    rgba(13, 43, 13, 0.4) 55%,
-    transparent 100%
-  );
-  transition: background 0.4s ease;
-}
-
-.case-card:hover .case-card__overlay {
-  background: linear-gradient(
-    to top,
-    rgba(13, 43, 13, 0.99) 0%,
-    rgba(13, 43, 13, 0.7) 60%,
-    rgba(13, 43, 13, 0.2) 100%
-  );
-}
-
-/* ── Card content ── */
-.case-card__content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 28px 24px;
-}
-
-.case-card__tag {
+.case-card__wordmark {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 9px;
+  font-size: clamp(26px, 3vw, 38px);
   font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #9BFA00;
-  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  color: #0D2B0D;
 }
 
-.case-card__brand {
+/* ── Info ── */
+.case-card__info {
+  padding: 0 24px 24px;
+}
+
+.case-card__info-name {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(22px, 2.5vw, 32px);
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0D2B0D;
+  margin: 0 0 4px;
+}
+
+.case-card__info-sub {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(13, 43, 13, 0.45);
+  margin: 0;
+}
+
+/* ── Footer com botão de seta ── */
+.case-card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(13, 43, 13, 0.1);
+  padding: 18px 24px;
+}
+
+.case-card__footer-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0D2B0D;
+}
+
+.case-card__footer-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #0D2B0D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(13, 43, 13, 0.12);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.case-card:hover .case-card__footer-btn {
+  background: #0D2B0D;
   color: #EDEAE3;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  margin: 0 0 6px;
-}
-
-.case-card__local {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: rgba(237, 234, 227, 0.45);
-  margin: 0 0 20px;
-}
-
-/* Stats dentro do card */
-.case-card__stats {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.case-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.case-stat__val {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 700;
-  color: #9BFA00;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.case-stat__label {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(237, 234, 227, 0.4);
-}
-
-/* ── Depoimento ── */
-.case-card__quote {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.4s ease 0.1s;
-}
-
-.case-card:hover .case-card__quote {
-  max-height: 120px;
-  opacity: 1;
-}
-
-.case-card__quote-text {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: rgba(237, 234, 227, 0.6);
-  margin: 16px 0 0;
-  border-left: 2px solid #9BFA00;
-  padding-left: 12px;
-}
-
-.case-card__quote-author {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(237, 234, 227, 0.35);
-  margin: 8px 0 0 14px;
+  transform: translateX(3px);
 }
 
 /* ── Linha inferior ── */
@@ -280,7 +263,7 @@
   }
   .case-card:nth-child(3) {
     grid-column: 1 / -1;
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 16 / 9;
   }
 }
 
@@ -290,7 +273,7 @@
   }
   .case-card:nth-child(3) {
     grid-column: auto;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
   }
   .cases-header {
     flex-direction: column;

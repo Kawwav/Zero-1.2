@@ -55,7 +55,7 @@ export default function ComoFunciona() {
     <section className="como">
       <div className="como-header">
         <div>
-          <p className="como-eyebrow">Nosso processo</p>
+          <p className="como-eyebrow"></p>
           <h2 className="como-title" ref={titleRef}>
             Como<br /><em>funciona</em>
           </h2>

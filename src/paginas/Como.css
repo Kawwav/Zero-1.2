@@ -11,9 +11,9 @@
 .como-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: end;
+  align-items: start;
   gap: 40px;
-  margin-bottom: clamp(56px, 9vh, 96px);
+  margin-bottom: clamp(64px, 11vh, 120px);
 }
 
 .como-eyebrow {
@@ -28,7 +28,7 @@
 
 .como-title {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(36px, 6vw, 80px);
+  font-size: clamp(32px, 5vw, 64px);
   font-weight: 700;
   color: #0D2B0D;
   line-height: 1;
@@ -53,12 +53,14 @@
 
 .como-desc {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(15px, 1.6vw, 18px);
+  font-size: clamp(17px, 1.9vw, 26px);
   font-weight: 400;
-  line-height: 1.65;
-  color: rgba(13, 43, 13, 0.55);
+  line-height: 1.5;
+  color: rgba(13, 43, 13, 0.65);
   margin: 0;
-  align-self: end;
+  justify-self: end;
+  text-align: left;
+  max-width: 620px;
 
   opacity: 0;
   transform: translateX(40px);
@@ -70,28 +72,31 @@
   transform: translateX(0);
 }
 
-/* ── Steps list ── */
+/* ── Steps grid ── */
 .como-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid rgba(13, 43, 13, 0.12);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .como-item {
-  display: grid;
-  grid-template-columns: 72px 1fr 1fr;
-  align-items: start;
-  gap: clamp(20px, 3vw, 48px);
-  padding: clamp(32px, 5vh, 52px) 0;
-  border-bottom: 1px solid rgba(13, 43, 13, 0.12);
-  position: relative;
+  padding: 0 clamp(20px, 2.5vw, 40px);
+  border-left: 1px solid rgba(13, 43, 13, 0.14);
+  display: flex;
+  flex-direction: column;
 
   opacity: 0;
   transform: translateY(32px);
   transition:
     opacity 0.8s ease,
     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.como-item:first-child {
+  padding-left: 0;
+  border-left: none;
 }
 
 .como-item.visible {
@@ -107,86 +112,73 @@
 /* Número */
 .como-item__num {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  color: rgba(13, 43, 13, 0.28);
-  padding-top: 6px;
+  font-size: clamp(48px, 6vw, 90px);
+  font-weight: 700;
+  color: #0D2B0D;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0 0 28px;
 }
 
 /* Nome da etapa */
 .como-item__name {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(24px, 3.5vw, 48px);
-  font-weight: 700;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
   color: #0D2B0D;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 1;
-  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0 0 16px;
   transition: color 0.3s ease;
 }
 
 .como-item:hover .como-item__name {
-  color: #067406;
-}
-
-/* Barra verde animada */
-.como-item__bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  background:  #067406;
-  width: 0;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.como-item:hover .como-item__bar {
-  width: 100%;
+  color: #2A6A2A;
 }
 
 /* Descrição */
+.como-item__desc {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(14px, 1vw, 15px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(13, 43, 13, 0.55);
+  margin: 0 0 28px;
+}
+
 .como-item__body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 4px;
+  flex: 1;
 }
 
-.como-item__desc {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(13px, 1.2vw, 15px);
-  font-weight: 400;
-  line-height: 1.7;
-  color: rgba(13, 43, 13, 0.55);
-  margin: 0;
-}
-
-/* Tag de duração */
+/* Link/tag estilo "Write us →" */
 .como-item__tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #3A6A3A;
-  background: #0674060e;
-  border: 1px solid #067406;
-  border-radius: 2px;
-  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0D2B0D;
+  margin-top: auto;
   width: fit-content;
+  cursor: default;
+  transition: gap 0.25s ease;
 }
 
-.como-item__tag-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #067406;
-  flex-shrink: 0;
+.como-item:hover .como-item__tag {
+  gap: 12px;
+}
+
+.como-item__tag-arrow {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.como-item:hover .como-item__tag-arrow {
+  transform: translateX(3px);
 }
 
 /* ── Responsive ── */
@@ -194,20 +186,27 @@
   .como-header {
     grid-template-columns: 1fr;
   }
-  .como-item {
-    grid-template-columns: 48px 1fr;
-    grid-template-rows: auto auto;
+  .como-desc {
+    justify-self: start;
+    max-width: none;
   }
-  .como-item__body {
-    grid-column: 2;
+  .como-list {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 48px;
+  }
+  .como-item:nth-child(3) {
+    border-left: none;
+    padding-left: 0;
   }
 }
 
 @media (max-width: 580px) {
-  .como-item {
+  .como-list {
     grid-template-columns: 1fr;
+    row-gap: 40px;
   }
-  .como-item__num {
-    padding-top: 0;
+  .como-item {
+    border-left: none;
+    padding-left: 0;
   }
 }

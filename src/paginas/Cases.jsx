@@ -69,7 +69,7 @@ export default function Cases() {
     <section className="cases">
       <div className="cases-header">
         <div>
-          <p className="cases-eyebrow">Resultados reais</p>
+          <p className="cases-eyebrow"></p>
           <h2 className="cases-title" ref={titleRef}>
             Cases de<br /><em>sucesso</em>
           </h2>
@@ -78,39 +78,44 @@ export default function Cases() {
       </div>
 
       <div className="cases-grid">
-        {CASES.map((c, i) => (
-          <div
-            key={c.id}
-            className="case-card"
-            ref={(el) => (cardRefs.current[i] = el)}
-          >
+        {CASES.map((c, i) => {
+          const [venue, location] = c.local.split("—").map((s) => s.trim());
+          return (
             <div
-              className="case-card__bg"
-              style={{ backgroundImage: `url(${c.bg})` }}
-            />
-            <div className="case-card__overlay" />
-
-            <div className="case-card__content">
-              <span className="case-card__tag">{c.tag}</span>
-              <h3 className="case-card__brand">{c.brand}</h3>
-              <p className="case-card__local">{c.local}</p>
-
-              <div className="case-card__stats">
-                {c.stats.map((s) => (
-                  <div className="case-stat" key={s.label}>
-                    <span className="case-stat__val">{s.val}</span>
-                    <span className="case-stat__label">{s.label}</span>
-                  </div>
-                ))}
+              key={c.id}
+              className="case-card"
+              ref={(el) => (cardRefs.current[i] = el)}
+            >
+              <div className="case-card__top">
+                <span className="case-card__badge-num">N.{c.id}</span>
+                <span className="case-card__badge-tag">{c.tag}</span>
+                {venue && <span className="case-card__badge-tag">{venue}</span>}
               </div>
 
-              <div className="case-card__quote">
-                <p className="case-card__quote-text">"{c.quote}"</p>
-                <p className="case-card__quote-author">{c.author}</p>
+              <div className="case-card__hero">
+                <div
+                  className="case-card__icon"
+                  style={{ backgroundImage: `url(${c.bg})` }}
+                />
+                <span className="case-card__wordmark">{c.brand}</span>
+              </div>
+
+              <div className="case-card__info">
+                <p className="case-card__info-name">{c.brand}</p>
+                <p className="case-card__info-sub">{location || c.local}</p>
+              </div>
+
+              <div className="case-card__footer">
+                <span className="case-card__footer-label">Ver case</span>
+                <span className="case-card__footer-btn">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="cases-footer">

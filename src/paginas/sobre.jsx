@@ -2,47 +2,47 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import "./sobre.css";
 
 const BRANDS = [
-  { src: "ambev.webp",     alt: "Ambev" },
-  { src: "harts.webp",     alt: "Hart's" },
-  { src: "heinz.webp",     alt: "Heinz" },
-  { src: "hemmer.webp",    alt: "Hemmer" },
-  { src: "nova.webp",      alt: "Nova" },
-  { src: "nugali.webp",    alt: "Nugali" },
+  { src: "ambev.webp", alt: "Ambev" },
+  { src: "harts.webp", alt: "Hart's" },
+  { src: "heinz.webp", alt: "Heinz" },
+  { src: "hemmer.webp", alt: "Hemmer" },
+  { src: "nova.webp", alt: "Nova" },
+  { src: "nugali.webp", alt: "Nugali" },
   { src: "paviloche.webp", alt: "Paviloche" },
-  { src: "quero.webp",     alt: "Quero" },
-  { src: "schluck.webp",   alt: "Schluck" },
+  { src: "quero.webp", alt: "Quero" },
+  { src: "schluck.webp", alt: "Schluck" },
 ];
 
 const BRANDS_LOOP = [...BRANDS, ...BRANDS];
 
 const STATE_COORDS = {
-  AC: { x: 32.3, y: 33.3 },
+  AC: { x: 28.8, y: 40.7 },
   AM: { x: 36.5, y: 26.9 },
   RR: { x: 41.1, y: 12.0 },
-  AP: { x: 51.3, y: 15.3 },
+  AP: { x: 53.3, y: 15.3 },
   PA: { x: 52.0, y: 26.9 },
-  RO: { x: 36.5, y: 37.0 },
-  MT: { x: 43.2, y: 38.9 },
-  TO: { x: 52.6, y: 37.0 },
-  MA: { x: 54.7, y: 26.9 },
-  PI: { x: 57.3, y: 29.6 },
-  CE: { x: 60.9, y: 27.8 },
-  RN: { x: 64.0, y: 26.9 },
-  PB: { x: 64.6, y: 28.7 },
-  PE: { x: 63.5, y: 30.6 },
-  AL: { x: 64.0, y: 32.4 },
-  SE: { x: 63.5, y: 34.3 },
-  BA: { x: 57.3, y: 40.7 },
-  GO: { x: 49.5, y: 43.5 },
-  DF: { x: 52.0, y: 42.6 },
-  MS: { x: 45.3, y: 50.0 },
-  MG: { x: 54.2, y: 48.1 },
-  ES: { x: 58.9, y: 48.1 },
-  RJ: { x: 56.8, y: 51.9 },
-  SP: { x: 52.0, y: 53.7 },
-  PR: { x: 50.5, y: 59.3 },
-  SC: { x: 51.0, y: 63.9 },
-  RS: { x: 49.0, y: 69.4 },
+  RO: { x: 36.5, y: 42.0 },
+  MT: { x: 47.2, y: 47.9 },
+  TO: { x: 58.6, y: 40.0 },
+  MA: { x: 62.7, y: 28.9 },
+  PI: { x: 66.3, y: 34.6 },
+  CE: { x: 69.9, y: 27.8 },
+  RN: { x: 74.5, y: 30.5 },
+  PB: { x: 74.6, y: 33.7 },
+  PE: { x: 73.5, y: 37.6 },
+  AL: { x: 73.8, y: 39.9 },
+  SE: { x: 72.8, y: 41.9 },
+  BA: { x: 67.3, y: 45.7 },
+  GO: { x: 55.4, y: 53.5 },
+  DF: { x: 58.9, y: 54.5 },
+  MS: { x: 49.3, y: 65.0 },
+  MG: { x: 64.2, y: 60.1 },
+  ES: { x: 68.7, y: 63.1 },
+  RJ: { x: 66.8, y: 69.9 },
+  SP: { x: 57.0, y: 68.7 },
+  PR: { x: 53.5, y: 75.3 },
+  SC: { x: 55.0, y: 81.9 },
+  RS: { x: 51.3, y: 87.4 },
 };
 
 const STATE_NAMES = {
@@ -173,21 +173,21 @@ function useScrollStat() {
   const update = useCallback(() => {
     const el = ref.current;
     if (!el) return;
-    const container = el.closest(".sobre-panel-content");
+    const container = el.closest(".painel-conteudo");
     const winH = container ? container.clientHeight : window.innerHeight;
     const rect = el.getBoundingClientRect();
     const containerRect = container ? container.getBoundingClientRect() : { top: 0 };
     const relTop = rect.top - containerRect.top;
     const start = winH * 0.92;
-    const end   = winH * 0.28;
-    const raw   = (start - relTop) / (start - end);
+    const end = winH * 0.28;
+    const raw = (start - relTop) / (start - end);
     setProgress(Math.min(Math.max(raw, 0), 1));
   }, []);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const container = el.closest(".sobre-panel-content") || window;
+    const container = el.closest(".painel-conteudo") || window;
     container.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update, { passive: true });
     update();
@@ -203,19 +203,19 @@ function useScrollStat() {
 /* ── Linha de stat animada ── */
 function StatRow({ label, valorFinal, sufixo = "", formatMil = false }) {
   const [ref, progress] = useScrollStat();
-  const count     = Math.floor(progress * valorFinal);
-  const pct       = progress * 100;
+  const count = Math.floor(progress * valorFinal);
+  const pct = progress * 100;
   const formatted = formatMil ? count.toLocaleString("pt-BR") : String(count);
-  const display   = sufixo === "+" ? `${formatted}+` : `${formatted}${sufixo}`;
+  const display = sufixo === "+" ? `${formatted}+` : `${formatted}${sufixo}`;
 
   return (
-    <div className="sobre-stat-row" ref={ref}>
-      <span className="sobre-stat-label">{label}</span>
-      <div className="sobre-stat-track">
-        <div className="sobre-stat-fill" style={{ width: `${pct}%` }} />
-        <div className="sobre-stat-dot"  style={{ left:  `${pct}%` }} />
+    <div className="numero-linha" ref={ref}>
+      <span className="numero-rotulo">{label}</span>
+      <div className="numero-trilha">
+        <div className="numero-preenchimento" style={{ width: `${pct}%` }} />
+        <div className="numero-ponto" style={{ left: `${pct}%` }} />
       </div>
-      <div className="sobre-stat-valor">{display}</div>
+      <div className="numero-valor">{display}</div>
     </div>
   );
 }
@@ -244,13 +244,13 @@ function useInView(options = {}) {
 export default function SobrePanel({ onClose }) {
   const [closing, setClosing] = useState(false);
 
-  const [innerRef,        innerVisible]        = useInView();
-  const [brandsRef,       brandsVisible]       = useInView();
-  const [mapRef,          mapVisible]          = useInView();
-  const [statsRef,        statsVisible]        = useInView();
-  const [diferenciais0,   diferenciais0Vis]    = useInView({ threshold: 0.1 });
-  const [diferenciais1,   diferenciais1Vis]    = useInView({ threshold: 0.1 });
-  const [diferenciais2,   diferenciais2Vis]    = useInView({ threshold: 0.1 });
+  const [innerRef, innerVisible] = useInView();
+  const [brandsRef, brandsVisible] = useInView();
+  const [mapRef, mapVisible] = useInView();
+  const [statsRef, statsVisible] = useInView();
+  const [diferenciais0, diferenciais0Vis] = useInView({ threshold: 0.1 });
+  const [diferenciais1, diferenciais1Vis] = useInView({ threshold: 0.1 });
+  const [diferenciais2, diferenciais2Vis] = useInView({ threshold: 0.1 });
 
   const [activeNetwork, setActiveNetwork] = useState(null);
   const [tooltip, setTooltip] = useState({ visible: false, uf: null, x: 0, y: 0 });
@@ -258,10 +258,10 @@ export default function SobrePanel({ onClose }) {
 
   const activeStates = activeNetwork
     ? new Set(
-        ALL_STATES.filter((uf) =>
-          STATE_DATA[uf].some((entry) => entry.rede === activeNetwork)
-        )
+      ALL_STATES.filter((uf) =>
+        STATE_DATA[uf].some((entry) => entry.rede === activeNetwork)
       )
+    )
     : new Set(ALL_STATES);
 
   const handleDotEnter = (uf, e) => {
@@ -294,27 +294,27 @@ export default function SobrePanel({ onClose }) {
   };
 
   return (
-    <div className="sobre-panel">
-      <div className={`sobre-panel-curtain${closing ? " closing" : ""}`} />
+    <div className="painel">
+      <div className={`painel-cortina${closing ? " closing" : ""}`} />
 
-      <div className={`sobre-panel-content${closing ? " closing" : ""}`}>
-        <header className="sobre-panel-header">
-          <img src="Logoescura.png" alt=".Zero" className="sobre-panel-logo" />
-          <button className="sobre-panel-voltar" onClick={handleClose} aria-label="Voltar">
-            <span className="sobre-panel-voltar-arrow">←</span> VOLTAR
+      <div className={`painel-conteudo${closing ? " closing" : ""}`}>
+        <header className="painel-cabecalho">
+          <img src="Logoescura.png" alt=".Zero" className="painel-logo" />
+          <button className="painel-voltar" onClick={handleClose} aria-label="Voltar">
+            <span className="painel-voltar-seta">←</span> VOLTAR
           </button>
         </header>
 
         {/* ── Texto principal ── */}
         <div
           ref={innerRef}
-          className={`sobre-panel-inner sobre-reveal${innerVisible ? " sobre-reveal--visible" : ""}`}
+          className={`painel-interno revelar${innerVisible ? " revelar--visivel" : ""}`}
         >
-          <p className="sobre-panel-label">Sobre Nós</p>
-          <h2 className="sobre-panel-title">
+          <p className="painel-rotulo">Sobre Nós</p>
+          <h2 className="painel-titulo">
             Transformamos<br />provas em vendas.
           </h2>
-          <p className="sobre-panel-body">
+          <p className="painel-texto">
             A .Zero nasceu da crença de que o momento da degustação é o mais
             poderoso dentro do varejo. Somos especialistas em conectar marcas ao
             público certo, no lugar certo e na hora certa.
@@ -324,34 +324,34 @@ export default function SobrePanel({ onClose }) {
         {/* ── Seção: Marcas (carrossel) ── */}
         <section
           ref={brandsRef}
-          className={`sobre-brands-section sobre-reveal${brandsVisible ? " sobre-reveal--visible" : ""}`}
+          className={`marcas-secao revelar${brandsVisible ? " revelar--visivel" : ""}`}
         >
-          <div className="sobre-brands-sticky">
+          <div className="marcas-fixo">
 
-            <div className="sobre-brands-left">
-              <p className="sobre-brands-eyebrow">Clientes</p>
-              <h3 className="sobre-brands-title">
+            <div className="marcas-esquerda">
+              <p className="marcas-legenda">Clientes</p>
+              <h3 className="marcas-titulo">
                 Marcas que<br /><em>trabalhamos</em>
               </h3>
-              <div className="sobre-brands-counter">
-                <span className="sobre-brands-counter-line" />
+              <div className="marcas-contador">
+                <span className="marcas-contador-linha" />
                 <span>{BRANDS.length} marcas parceiras</span>
               </div>
             </div>
 
-            <div className="sobre-brands-right">
-              <div className="sobre-brands-track">
+            <div className="marcas-direita">
+              <div className="marcas-trilha">
                 {BRANDS_LOOP.map((b, i) => (
-                  <div className="sobre-brand-item" key={i} aria-hidden={i >= BRANDS.length}>
+                  <div className="marca-item" key={i} aria-hidden={i >= BRANDS.length}>
                     <img src={b.src} alt={i < BRANDS.length ? b.alt : ""} />
                     {i < BRANDS.length && (
-                      <span className="sobre-brand-item-name">{b.alt}</span>
+                      <span className="marca-item-nome">{b.alt}</span>
                     )}
                   </div>
                 ))}
               </div>
-              <div className="sobre-brands-blur sobre-brands-blur--left" />
-              <div className="sobre-brands-blur sobre-brands-blur--right" />
+              <div className="marcas-desfoque marcas-desfoque--esquerda" />
+              <div className="marcas-desfoque marcas-desfoque--direita" />
             </div>
 
           </div>
@@ -360,25 +360,25 @@ export default function SobrePanel({ onClose }) {
         {/* ── Seção: Mapa de Mercados ── */}
         <section
           ref={mapRef}
-          className={`sobre-brands-section sobre-markets-section sobre-reveal${mapVisible ? " sobre-reveal--visible" : ""}`}
+          className={`marcas-secao mercados-secao revelar${mapVisible ? " revelar--visivel" : ""}`}
         >
-          <div className="bmap-section">
+          <div className="mapa-secao">
 
-            <div className="bmap-left">
-              <p className="sobre-brands-eyebrow">Onde atuamos</p>
-              <h3 className="sobre-brands-title">
+            <div className="mapa-esquerda">
+              <p className="marcas-legenda">Onde atuamos</p>
+              <h3 className="marcas-titulo">
                 Mercados<br /><em>parceiros</em>
               </h3>
-              <div className="sobre-brands-counter">
-                <span className="sobre-brands-counter-line" />
+              <div className="marcas-contador">
+                <span className="marcas-contador-linha" />
                 <span>{ALL_NETWORKS.length} redes parceiras</span>
               </div>
 
-              <div className="bmap-tags">
+              <div className="mapa-tags">
                 {ALL_NETWORKS.map((name) => (
                   <button
                     key={name}
-                    className={`bmap-tag${activeNetwork === name ? " bmap-tag--active" : ""}`}
+                    className={`mapa-tag${activeNetwork === name ? " mapa-tag--ativo" : ""}`}
                     onClick={() => toggleNetwork(name)}
                   >
                     {name}
@@ -387,11 +387,11 @@ export default function SobrePanel({ onClose }) {
               </div>
             </div>
 
-            <div className="bmap-right" ref={mapWrapRef}>
+            <div className="mapa-direita" ref={mapWrapRef}>
               <img
                 src="mapa.png"
                 alt="Mapa do Brasil com presença das redes parceiras"
-                className="bmap-img"
+                className="mapa-imagem"
                 draggable={false}
               />
 
@@ -401,7 +401,7 @@ export default function SobrePanel({ onClose }) {
                 return (
                   <span
                     key={uf}
-                    className={`bmap-dot${active ? " bmap-dot--active" : " bmap-dot--dim"}`}
+                    className={`mapa-ponto${active ? " mapa-ponto--ativo" : " mapa-ponto--apagado"}`}
                     style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                     onMouseEnter={(e) => handleDotEnter(uf, e)}
                     onMouseLeave={handleDotLeave}
@@ -412,14 +412,14 @@ export default function SobrePanel({ onClose }) {
 
               {tooltip.visible && tooltipEntries && (
                 <div
-                  className="bmap-tooltip bmap-tooltip--visible"
+                  className="mapa-dica mapa-dica--visivel"
                   style={{ left: tooltip.x, top: tooltip.y }}
                 >
-                  <div className="bmap-tooltip-title">{STATE_NAMES[tooltip.uf]}</div>
+                  <div className="mapa-dica-titulo">{STATE_NAMES[tooltip.uf]}</div>
                   {tooltipEntries.map((entry, i) => (
-                    <div className="bmap-tooltip-entry" key={i}>
-                      <span className="bmap-tooltip-brand">{entry.rede}</span>
-                      <span className="bmap-tooltip-cities">
+                    <div className="mapa-dica-item" key={i}>
+                      <span className="mapa-dica-marca">{entry.rede}</span>
+                      <span className="mapa-dica-cidades">
                         {entry.cidades.join(", ")}
                       </span>
                     </div>
@@ -436,49 +436,63 @@ export default function SobrePanel({ onClose }) {
         {/* ── Seção: Stats ── */}
         <section
           ref={statsRef}
-          className={`sobre-stats-section sobre-reveal${statsVisible ? " sobre-reveal--visible" : ""}`}
+          className={`numeros-secao revelar${statsVisible ? " revelar--visivel" : ""}`}
         >
-          <p className="sobre-stats-eyebrow">Nossos números</p>
-          <div className="sobre-stats-list">
+          <p className="numeros-legenda">Nossos números</p>
+          <div className="numeros-lista">
             <StatRow label="Clientes Atendidos" valorFinal={120} sufixo="+" />
-            <StatRow label="Ações Realizadas"   valorFinal={850} sufixo="+" formatMil />
-            <StatRow label="Taxa de Satisfação"  valorFinal={100} sufixo="%" />
+            <StatRow label="Ações Realizadas" valorFinal={850} sufixo="+" formatMil />
+            <StatRow label="Taxa de Satisfação" valorFinal={100} sufixo="%" />
           </div>
         </section>
 
 
         {/* ── Seção: Diferenciais ── */}
-        <section className="sobre-diferenciais-section">
-          <div className="sobre-diferenciais-grid">
+        <section className="diferenciais-secao">
+          <div className="diferenciais-cabecalho">
+            <h3 className="diferenciais-titulo-secao">
+              Nossos diferenciais{" "}
+              <span className="diferenciais-titulo-pontos">
+                <span className="ponto"></span>
+                <span className="ponto"></span>
+                <span className="ponto"></span>
+              </span>
+            </h3>
+          </div>
+
+          <div className="diferenciais-grade">
             <div
               ref={diferenciais0}
-              className={`sobre-diferencial-card sobre-reveal sobre-reveal--slide-left${diferenciais0Vis ? " sobre-reveal--visible" : ""}`}
+              className={`diferencial-cartao revelar revelar--esquerda${diferenciais0Vis ? " revelar--visivel" : ""}`}
             >
-              <span className="sobre-diferencial-num">01</span>
-              <h3 className="sobre-diferencial-titulo">Degustação<br />Estratégica</h3>
-              <p className="sobre-diferencial-desc">
+              <span className="diferencial-numero">01</span>
+              <span className="diferencial-linha" />
+              <h3 className="diferencial-titulo">Degustação<br />Estratégica</h3>
+              <p className="diferencial-texto">
                 Planejamos cada ação com base no perfil do produto, do ponto de
                 venda e do público-alvo — nada é improvisado.
               </p>
             </div>
             <div
               ref={diferenciais1}
-              className={`sobre-diferencial-card sobre-reveal${diferenciais1Vis ? " sobre-reveal--visible" : ""}`}
+              className={`diferencial-cartao revelar${diferenciais1Vis ? " revelar--visivel" : ""}`}
             >
-              <span className="sobre-diferencial-num">02</span>
-              <h3 className="sobre-diferencial-titulo">Time<br />Treinado</h3>
-              <p className="sobre-diferencial-desc">
+              <span className="diferencial-numero">02</span>
+              <span className="diferencial-linha" />
+              <h3 className="diferencial-titulo">Time<br />Treinado</h3>
+              <p className="diferencial-texto">
                 Nossos promotores são capacitados para criar conexões reais:
                 contam a história do produto e geram desejo genuíno.
               </p>
             </div>
             <div
               ref={diferenciais2}
-              className={`sobre-diferencial-card sobre-reveal sobre-reveal--slide-right${diferenciais2Vis ? " sobre-reveal--visible" : ""}`}
+              className={`diferencial-cartao revelar revelar--direita${diferenciais2Vis ? " revelar--visivel" : ""}`}
             >
-              <span className="sobre-diferencial-num">03</span>
-              <h3 className="sobre-diferencial-titulo">Execução<br />Completa</h3>
-              <p className="sobre-diferencial-desc">
+              <span className="diferencial-numero">03</span>
+              <span className="diferencial-linha" />
+              <h3 className="diferencial-titulo">Execução<br />Completa</h3>
+              <p className="diferencial-texto">
                 Do planejamento ao relatório final, cuidamos de cada detalhe para
                 que sua marca brilhe no ponto de venda.
               </p>
