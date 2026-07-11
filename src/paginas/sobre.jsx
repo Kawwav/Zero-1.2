@@ -329,13 +329,10 @@ export default function SobrePanel({ onClose }) {
           <div className="marcas-fixo">
 
             <div className="marcas-esquerda">
-              <p className="marcas-legenda">Clientes</p>
               <h3 className="marcas-titulo">
                 Marcas que<br /><em>trabalhamos</em>
               </h3>
               <div className="marcas-contador">
-                <span className="marcas-contador-linha" />
-                <span>{BRANDS.length} marcas parceiras</span>
               </div>
             </div>
 
@@ -365,7 +362,7 @@ export default function SobrePanel({ onClose }) {
           <div className="mapa-secao">
 
             <div className="mapa-esquerda">
-              <p className="marcas-legenda">Onde atuamos</p>
+
               <h3 className="marcas-titulo">
                 Mercados<br /><em>parceiros</em>
               </h3>

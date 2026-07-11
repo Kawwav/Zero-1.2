@@ -152,9 +152,13 @@
   inset: 0;
   z-index: 9000;
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
   background: rgba(1, 25, 1, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   animation: backdropIn 0.5s ease forwards;
 }
 
@@ -163,38 +167,69 @@
 }
 
 @keyframes backdropIn {
-  to { background: rgba(1, 25, 1, 0.72); }
+  to {
+    background: rgba(1, 25, 1, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }
 
 @keyframes backdropOut {
-  from { background: rgba(1, 25, 1, 0.72); }
-  to   { background: rgba(1, 25, 1, 0); }
+  from {
+    background: rgba(1, 25, 1, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  to {
+    background: rgba(1, 25, 1, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
 }
 
-/* ── Modal panel — slides in from right ────────────────────── */
-.svc-modal {
+/* ── Wrapper — sobe do chão junto com o boneco ────────────────── */
+.svc-modal-wrap {
   position: relative;
-  width: min(520px, 100vw);
-  height: 100vh;
-  background: #0D2B0D;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transform: translateX(100%);
+  padding-top: clamp(90px, 13vh, 150px);
+  transform: translateY(120%);
   animation: panelIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.svc-modal.closing {
-  animation: panelOut 0.55s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+.svc-modal-wrap.closing {
+  animation: panelOut 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
 }
 
 @keyframes panelIn {
-  to { transform: translateX(0); }
+  to { transform: translateY(0); }
 }
 
 @keyframes panelOut {
-  from { transform: translateX(0); }
-  to   { transform: translateX(100%); }
+  from { transform: translateY(0); }
+  to   { transform: translateY(-120%); }
+}
+
+/* ── Modal panel — retângulo verde ────────────────────────────── */
+.svc-modal {
+  position: relative;
+  width: min(1400px, 92vw);
+  height: min(880px, 75vh);
+  max-height: 1600px;
+  background: #0D2B0D;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+}
+
+
+.svc-modal-mascot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: clamp(110px, 15vw, 170px);
+  height: auto;
+  transform: translate(-50%, 0);
+  z-index: 5;
+  pointer-events: none;
 }
 
 /* ── Close button ───────────────────────────────────────────── */
@@ -238,124 +273,6 @@
   transform: rotate(-45deg) translateY(-3.5px);
 }
 
-/* ── Image block — top 55% ──────────────────────────────────── */
-.svc-modal-img-wrap {
-  position: relative;
-  flex: 0 0 55%;
-  overflow: hidden;
-}
-
-.svc-modal-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: grayscale(20%);
-  animation: imgReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-}
-
-@keyframes imgReveal {
-  from { transform: scale(1.08); }
-  to   { transform: scale(1); }
-}
-
-.svc-modal-img-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 40%,
-    #0D2B0D 100%
-  );
-}
-
-.svc-modal-number {
-  position: absolute;
-  bottom: 16px;
-  left: 28px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.25em;
-  color: rgba(155, 250, 0, 0.55);
-  text-transform: uppercase;
-}
-
-/* ── Text body — bottom 45% ─────────────────────────────────── */
-.svc-modal-body {
-  flex: 1;
-  padding: 32px 28px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  animation: bodyFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
-}
-
-@keyframes bodyFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.svc-modal-label {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(155, 250, 0, 0.55);
-  margin: 0 0 10px;
-}
-
-.svc-modal-title {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(36px, 7vw, 56px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #EDEAE3;
-  margin: 0;
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-
-.svc-modal-divider {
-  width: 32px;
-  height: 2px;
-  background: #9afa0000;
-  margin: 20px 0;
-}
-
-.svc-modal-desc {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: rgba(237, 234, 227, 0.6);
-  margin: 0 0 28px;
-  max-width: 360px;
-}
-
-.svc-modal-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #0D2B0D;
-  background: #9BFA00;
-  text-decoration: none;
-  padding: 12px 22px;
-  border-radius: 2px;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.svc-modal-cta:hover {
-  background: #1c3f1b;
-}
-
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .servicos-item-name {
@@ -366,7 +283,17 @@
     display: none;
   }
 
+  .svc-modal-wrap {
+    padding-top: 80px;
+  }
+
+  .svc-modal-mascot {
+    width: 100px;
+  }
+
   .svc-modal {
-    width: 100vw;
+    width: 94vw;
+    height: min(55vh, 420px);
+    border-radius: 16px;
   }
 }

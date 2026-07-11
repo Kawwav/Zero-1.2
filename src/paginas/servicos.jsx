@@ -7,18 +7,21 @@ const SERVICOS = [
     name: "PROMOTORES",
     image: "./1.jpg",
     desc: "Equipes treinadas para representar sua marca com excelência no ponto de venda.",
+    mascot: "./boneco1.png",
   },
   {
     id: "02",
     name: "DEGUSTAÇÃO",
     image: "./promotor.jpg",
     desc: "Equipes treinadas para representar sua marca com excelência no ponto de venda.",
+    mascot: "./boneco2.png",
   },
   {
     id: "03",
     name: "TAXA",
     image: "./1.jpg",
     desc: "Equipes treinadas para representar sua marca com excelência no ponto de venda.",
+    mascot: "./boneco.png",
   },
 ];
 
@@ -139,31 +142,22 @@ export default function Servicos() {
           className={`svc-modal-backdrop${modalClosing ? " closing" : ""}`}
           onClick={closeModal}
         >
-          <div
-            className={`svc-modal${modalClosing ? " closing" : ""}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="svc-modal-close" onClick={closeModal} aria-label="Fechar">
-              <span />
-              <span />
-            </button>
+          <div className={`svc-modal-wrap${modalClosing ? " closing" : ""}`}>
+            <img
+              src={modal.mascot}
+              alt=""
+              className="svc-modal-mascot"
+              aria-hidden="true"
+            />
 
-            <div className="svc-modal-img-wrap">
-              <img src={modal.image} alt={modal.name} className="svc-modal-img" />
-              <div className="svc-modal-img-overlay" />
-              <span className="svc-modal-number">{modal.id}</span>
-            </div>
-
-            <div className="svc-modal-body">
-              <p className="svc-modal-label">Serviço</p>
-              <h3 className="svc-modal-title">{modal.name}</h3>
-              <div className="svc-modal-divider" />
-              <p className="svc-modal-desc">{modal.desc}</p>
-              <a href="#contato" className="svc-modal-cta" onClick={closeModal}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
+            <div
+              className="svc-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="svc-modal-close" onClick={closeModal} aria-label="Fechar">
+                <span />
+                <span />
+              </button>
             </div>
           </div>
         </div>

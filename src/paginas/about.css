@@ -10,8 +10,21 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 900px) {
+  .sobre {
+    min-height: auto;
+    padding: 80px 32px 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sobre {
+    padding: 64px 20px 130px;
+  }
+}
+
 .sobre-number {
-  font-size: 240px;
+  font-size: clamp(80px, 22vw, 240px);
   font-weight: 700;
   color: rgba(13, 43, 13, 0.068);
   line-height: 0.8;
@@ -72,6 +85,12 @@
   opacity: 0;
   transform: translateX(-80px);
   transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+@media (max-width: 700px) {
+  .sobre-headline br.sobre-break {
+    display: none;
+  }
 }
 
 /* ── Aside — vem da direita ─────────────────────────────────── */
@@ -159,10 +178,32 @@
   transform: translateX(-50%);
 }
 
+@media (max-width: 900px) {
+  .sobre-info-footer {
+    bottom: 60px;
+    right: 32px;
+  }
+  .sobre-linha-final {
+    bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sobre-info-footer {
+    right: 20px;
+    bottom: 50px;
+  }
+  .sobre-linha-final {
+    bottom: 32px;
+    width: 85%;
+  }
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .sobre-inner {
     grid-template-columns: 1fr;
+    gap: 32px;
     text-align: left;
   }
   .sobre-aside,
@@ -171,10 +212,34 @@
     text-align: left;
     align-items: flex-start;
   }
+  .sobre-desc {
+    max-width: none;
+  }
 }
 
 @media (max-width: 700px) {
   .sobre-aside {
     align-items: flex-start;
+    gap: 16px;
+  }
+  .sobre-desc {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sobre-inner {
+    gap: 24px;
+  }
+  .sobre-headline {
+    line-height: 1.05;
+  }
+  .sobre-desc {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .sobre-cta {
+    font-size: 12px;
+    letter-spacing: 0.1em;
   }
 }

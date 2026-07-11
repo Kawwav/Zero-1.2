@@ -121,15 +121,6 @@
   z-index: 2;
 }
 
-.marcas-legenda {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: #7A8A7A;
-  margin: 0 0 16px;
-}
 
 .marcas-titulo {
   font-family: system-ui, -apple-system, sans-serif;
@@ -157,13 +148,7 @@
   letter-spacing: 0.08em;
 }
 
-.marcas-contador-linha {
-  display: inline-block;
-  width: 24px;
-  height: 1px;
-  background: #9BB09B;
-  flex-shrink: 0;
-}
+
 
 /* ── Right: carrossel ── */
 .marcas-direita {

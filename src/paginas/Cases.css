@@ -1,11 +1,23 @@
-/* ── Cases Section ──────────────────────────────────────────── */
-.cases {
+/* ── Cases Scroll Wrapper (controla o "trilho" de scroll) ────── */
+.cases-scroll-wrapper {
   position: relative;
   width: 100%;
+}
+
+/* ── Cases Section ──────────────────────────────────────────── */
+.cases {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   background: #EDEAE3;
-  padding: clamp(60px, 10vh, 100px) clamp(32px, 8vw, 120px);
+  padding: clamp(120px, 18vh, 180px) clamp(32px, 8vw, 120px) clamp(60px, 10vh, 100px);
   box-sizing: border-box;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .cases-header {
@@ -35,7 +47,6 @@
   letter-spacing: -0.03em;
   text-transform: uppercase;
   margin: 0;
-
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
@@ -44,12 +55,6 @@
 .cases-title.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.cases-title em {
-  font-style: normal;
-  -webkit-text-stroke: 2px #0D2B0D;
-  color: transparent;
 }
 
 .cases-counter {
@@ -68,6 +73,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(24px, 3vw, 48px);
+  justify-items: center;
 }
 
 /* ── Card ───────────────────────────────────────────────────── */
@@ -75,32 +81,20 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  aspect-ratio: 4 / 5;
+  width: 92%;
+  aspect-ratio: 4 / 4.5;
   border-radius: 22px;
   background: #E2E1DC;
   border: 1px solid rgba(13, 43, 13, 0.08);
   cursor: pointer;
   overflow: hidden;
-  opacity: 0;
-  transform: translateY(60px);
-  transition:
-    opacity 0.8s ease,
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.4s ease;
-}
-
-.case-card.visible {
-  opacity: 1;
-  transform: translateY(0);
+  will-change: transform, opacity;
+  transition: box-shadow 0.4s ease;
 }
 
 .case-card:hover {
   box-shadow: 0 18px 40px rgba(13, 43, 13, 0.12);
 }
-
-.case-card:nth-child(1) { transition-delay: 0.05s; }
-.case-card:nth-child(2) { transition-delay: 0.15s; }
-.case-card:nth-child(3) { transition-delay: 0.25s; }
 
 /* ── Badges no topo ── */
 .case-card__top {
@@ -137,20 +131,19 @@
 .case-card__hero {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 40% 22px 0;
 }
 
 .case-card__icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  border: 1px solid rgba(13, 43, 13, 0.1);
+  width: min(220px, 64%);
+  height: clamp(40px, 8vw, 70px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
 }
 
 .case-card__wordmark {
@@ -164,12 +157,13 @@
 
 /* ── Info ── */
 .case-card__info {
+  margin-top: -14px;
   padding: 0 24px 24px;
 }
 
 .case-card__info-name {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 500;
   color: #0D2B0D;
   margin: 0 0 4px;
@@ -177,7 +171,7 @@
 
 .case-card__info-sub {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   color: rgba(13, 43, 13, 0.45);
   margin: 0;
@@ -195,7 +189,7 @@
 
 .case-card__footer-label {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   color: #0D2B0D;
 }
@@ -267,16 +261,95 @@
   }
 }
 
-@media (max-width: 580px) {
-  .cases-grid {
-    grid-template-columns: 1fr;
+/* Abaixo de 780px o scroll "pinado" com animação circular é desligado
+   (ver Cases.jsx: isMobile). A seção volta a ser um bloco normal, com
+   altura automática, e os cards viram um carrossel horizontal — a
+   navegação entre eles é por arraste (mouse ou touch), sem bolinhas
+   de paginação. */
+@media (max-width: 780px) {
+  .cases-scroll-wrapper {
+    height: auto !important;
   }
-  .case-card:nth-child(3) {
-    grid-column: auto;
-    aspect-ratio: 4 / 5;
+
+  .cases {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    justify-content: flex-start;
+    padding: 80px 20px 60px;
   }
+
   .cases-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  .case-card {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* ── Carrossel ── */
+  .cases-grid {
+    display: flex;
+    grid-template-columns: none;
+    justify-items: initial;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 6vw;
+    gap: 16px;
+    margin: 0 -20px;
+    padding: 4px 20px 8px;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .cases-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cases-grid.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .cases-grid.dragging .case-card {
+    pointer-events: none;
+  }
+
+  .case-card,
+  .case-card:nth-child(3) {
+    flex: 0 0 78%;
+    width: auto;
+    aspect-ratio: 4 / 4.6;
+    grid-column: auto;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .cases {
+    padding: 64px 16px 48px;
+  }
+  .cases-grid {
+    margin: 0 -16px;
+    padding: 4px 16px 8px;
+  }
+  .case-card,
+  .case-card:nth-child(3) {
+    flex-basis: 84%;
+  }
+  .cases-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .cases-cta {
+    align-self: flex-start;
   }
 }

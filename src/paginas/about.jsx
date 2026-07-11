@@ -50,11 +50,11 @@ export default function Sobre() {
       <section className="sobre">
         <div className="sobre-inner">
           <h2 className="sobre-headline" ref={headlineRef}>
-            A .Zero conecta<br />
-            marcas ao<br />
-            público<br />
-            certo, no<br />
-            momento<br />
+            A .Zero conecta{" "}<br className="sobre-break" />
+            marcas ao{" "}<br className="sobre-break" />
+            público{" "}<br className="sobre-break" />
+            certo, no{" "}<br className="sobre-break" />
+            momento{" "}<br className="sobre-break" />
             certo.
           </h2>
 
