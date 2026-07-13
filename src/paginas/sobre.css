@@ -124,7 +124,7 @@
 
 .marcas-titulo {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 70px;
+  font-size: clamp(32px, 6vw, 70px);
   font-weight: 700;
   color: #0D2B0D;
   line-height: 1.08;
@@ -238,15 +238,27 @@
 }
 
 @media (max-width: 640px) {
+  .marcas-fixo {
+    flex-direction: column;
+    align-items: stretch;
+  }
   .marcas-esquerda {
-    width: clamp(130px, 34vw, 200px);
-    padding-right: 16px;
+    width: 100%;
+    padding-left: clamp(24px, 6vw, 40px);
+    padding-right: clamp(24px, 6vw, 40px);
+    padding-bottom: 24px;
+  }
+  .marcas-direita {
+    width: 100%;
   }
   .marca-item {
     width: 52vw;
     height: 44vw;
   }
   .marcas-contador { display: none; }
+  .marcas-desfoque {
+    width: clamp(40px, 12vw, 80px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -357,8 +369,10 @@
 .mapa-direita {
   flex: 1 1 0;
   min-width: 0;
+  max-width: 660px;
   position: relative;
-  aspect-ratio: 1920 / 1080;
+  aspect-ratio: 709 / 732;
+  margin-left: 180px;
 }
 
 .mapa-imagem {
@@ -476,9 +490,16 @@
 @media (max-width: 960px) {
   .mapa-secao {
     flex-direction: column;
+    align-items: stretch;
   }
   .mapa-esquerda {
     width: 100%;
+  }
+  .mapa-direita {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    flex: none;
   }
 }
 
