@@ -37,12 +37,10 @@ export default function Sobre() {
   const handleSobreClick = (e) => {
     e.preventDefault();
     setPanelOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   const handleClose = () => {
     setPanelOpen(false);
-    document.body.style.overflow = "";
   };
 
   return (

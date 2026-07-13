@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import "./Cases.css";
 
 const CASES = [
@@ -43,23 +43,53 @@ const CASES = [
   },
 ];
 
-// Distância de scroll (em vh) reservada para a animação de CADA card.
-// Quanto maior, mais "devagar" o card percorre o caminho circular.
-const SEGMENT_VH = 70;
-
-// Abaixo desta largura, a animação de scroll "pinado" é desligada
+// Abaixo desta largura, a animação de scroll "travado" é desligada
 // (mesmo breakpoint usado em Cases.css) para não cortar o conteúdo
 // empilhado, que fica mais alto que 100vh no mobile.
 const MOBILE_BREAKPOINT = 780;
 
+// Sensibilidade do wheel/touch: quanto cada pixel de delta move o
+// "alvo" do progresso (0 → 1). A posição atual persegue esse alvo
+// suavemente (ver EASE), não pula direto pra ele.
+// Valores mais baixos = precisa rolar mais pra completar a animação
+// (mais devagar).
+const WHEEL_SENSITIVITY = 0.0008;
+const TOUCH_SENSITIVITY = 0.0014;
+
+// Fator de suavização do lerp por frame (0-1). Quanto MENOR, mais a
+// animação "atrasa" atrás do alvo — dá aquele efeito de delay/inércia.
+const EASE = 0.07;
+
+// Cada card leva essa fração do progresso total (0-1) pra animar por
+// completo, e o próximo só começa depois de STAGGER_GAP de progresso —
+// como STAGGER_GAP < CARD_WINDOW, eles ficam se sobrepondo um pouco,
+// criando aquele efeito de "atrasado", em cascata, ao invés de todos
+// se moverem sincronizados.
+const CARD_WINDOW = 0.62;
+const STAGGER_GAP = 0.19;
+
 export default function Cases() {
   const titleRef = useRef(null);
   const wrapperRef = useRef(null);
+  const sectionRef = useRef(null);
+  const gridRef = useRef(null);
   const cardRefs = useRef([]);
   const radiusRef = useRef(600);
+  const dragRef = useRef({ active: false, startX: 0, startScroll: 0 });
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth <= MOBILE_BREAKPOINT
   );
+
+  // Progresso da animação circular (0 = cards escondidos, 1 = no lugar)
+  const progressRef = useRef(0);
+  // "Alvo" pra onde o progresso está indo — o valor real (progressRef)
+  // persegue esse alvo suavemente, frame a frame (efeito de inércia).
+  const targetProgressRef = useRef(0);
+  const rafIdRef = useRef(null);
+  // true enquanto o scroll da página está "travado" pela seção
+  const lockedRef = useRef(false);
+  // posição Y do dedo no touch, para calcular delta manualmente
+  const touchYRef = useRef(0);
 
   // Acompanha o breakpoint mobile para ligar/desligar a animação pinada
   useEffect(() => {
@@ -84,16 +114,63 @@ export default function Cases() {
     return () => observer.disconnect();
   }, []);
 
-  // Animação dos cards em caminho circular, presa (pinada) ao scroll
+  // Aplica o progresso (0 → 1) da animação circular nos cards
+  const applyProgress = useCallback((progress) => {
+    const R = radiusRef.current;
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return;
+
+      // janela de progresso reservada para este card, com atraso em
+      // cascata em relação ao anterior (ver CARD_WINDOW / STAGGER_GAP)
+      let local = (progress - i * STAGGER_GAP) / CARD_WINDOW;
+      local = Math.min(1, Math.max(0, local));
+
+      // easing suave (ease-out)
+      const eased = 1 - Math.pow(1 - local, 3);
+
+      // ângulo de 90° (início) até 0° (posição final no grid)
+      const theta = (1 - eased) * (Math.PI / 2);
+      const offsetX = R * Math.sin(theta);   // vem da direita
+      const offsetY = R * (1 - Math.cos(theta)); // vem de baixo
+      const opacity = 0.15 + eased * 0.85;
+      const scale = 0.85 + eased * 0.15;
+
+      card.style.transform =
+        `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+      card.style.opacity = String(opacity);
+    });
+  }, []);
+
+  // Trava/destrava o scroll da página (usado enquanto os cards animam)
+  const lockScroll = () => {
+    if (lockedRef.current) return;
+    lockedRef.current = true;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+  };
+
+  const unlockScroll = () => {
+    if (!lockedRef.current) return;
+    lockedRef.current = false;
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+  };
+
+  // Quando a seção "cases" chega ao topo da viewport, o scroll da
+  // página trava. Os cards então sobem/animam conforme o usuário
+  // continua rolando (wheel/touch), sem que a página em si role.
+  // Quando os 3 cards terminam de entrar (ou voltam a esconder, se o
+  // usuário rolar pra cima), o scroll da página é destravado de novo.
   useEffect(() => {
     if (isMobile) {
-      // No mobile a seção não fica "pinada": os cards aparecem
+      // No mobile a seção não trava o scroll: os cards aparecem
       // normais, empilhados, sem transform/opacity controlados por JS.
       cardRefs.current.forEach((card) => {
         if (!card) return;
         card.style.transform = "";
         card.style.opacity = "";
       });
+      unlockScroll();
       return;
     }
 
@@ -101,86 +178,161 @@ export default function Cases() {
       radiusRef.current = Math.min(window.innerWidth * 0.55, 620);
     };
     computeRadius();
+    applyProgress(progressRef.current);
 
-    const N = cardRefs.current.length;
-    let ticking = false;
+    // Loop de interpolação: a cada frame, a posição atual (progressRef)
+    // persegue o alvo (targetProgressRef) com suavização (EASE). É o que
+    // faz a animação fluir mesmo quando o wheel chega em pulos grandes
+    // (mouse com "notches") ou pequenos (trackpad).
+    const tick = () => {
+      const current = progressRef.current;
+      const target = targetProgressRef.current;
+      const diff = target - current;
 
-    const applyProgress = (progress) => {
-      const R = radiusRef.current;
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
+      if (Math.abs(diff) < 0.001) {
+        progressRef.current = target;
+        applyProgress(progressRef.current);
+        rafIdRef.current = null;
+        if (progressRef.current >= 1 || progressRef.current <= 0) {
+          unlockScroll();
+        }
+        return; // para o loop; só reinicia no próximo input
+      }
 
-        // fatia de progresso reservada para este card (0 → 1)
-        let local = (progress - i / N) / (1 / N);
-        local = Math.min(1, Math.max(0, local));
-
-        // easing suave (ease-out)
-        const eased = 1 - Math.pow(1 - local, 3);
-
-        // ângulo de 90° (início) até 0° (posição final no grid)
-        const theta = (1 - eased) * (Math.PI / 2);
-        const offsetX = R * Math.sin(theta);   // vem da direita
-        const offsetY = R * (1 - Math.cos(theta)); // vem de baixo
-        const opacity = 0.15 + eased * 0.85;
-        const scale = 0.85 + eased * 0.15;
-
-        card.style.transform =
-          `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-        card.style.opacity = String(opacity);
-      });
+      progressRef.current = current + diff * EASE;
+      applyProgress(progressRef.current);
+      rafIdRef.current = requestAnimationFrame(tick);
     };
 
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const wrapper = wrapperRef.current;
-        if (wrapper) {
-          const viewportH = window.innerHeight;
-          const total = wrapper.offsetHeight - viewportH;
-          const rectTop = wrapper.getBoundingClientRect().top;
+    const ensureLoopRunning = () => {
+      if (rafIdRef.current == null) {
+        rafIdRef.current = requestAnimationFrame(tick);
+      }
+    };
 
-          let progress;
-          if (total <= 0) {
-            progress = 1;
-          } else if (rectTop >= 0) {
-            progress = 0;
-          } else if (rectTop <= -total) {
-            progress = 1;
-          } else {
-            progress = -rectTop / total;
-          }
-          applyProgress(progress);
-        }
-        ticking = false;
-      });
+    const moveTarget = (delta) => {
+      targetProgressRef.current = Math.min(
+        1,
+        Math.max(0, targetProgressRef.current + delta)
+      );
+      ensureLoopRunning();
+    };
+
+    // Alinha a seção exatamente no topo da viewport (corrige qualquer
+    // "overshoot" do scroll nativo) e só então trava.
+    const snapAndLock = () => {
+      const section = sectionRef.current;
+      if (!section) return;
+      const offset = section.getBoundingClientRect().top;
+      if (Math.abs(offset) > 0.5) {
+        window.scrollBy(0, offset);
+      }
+      targetProgressRef.current = progressRef.current;
+      lockScroll();
+    };
+
+    // Detecta, pelo evento de scroll nativo (que reflete a posição já
+    // aplicada pelo navegador), o momento em que a seção se aproxima do
+    // topo da tela — tanto vindo de cima (rolando pra baixo, entrando
+    // pela primeira vez) quanto vindo de baixo (rolando pra cima, de
+    // volta pra reverter a animação).
+    const handleScroll = () => {
+      if (lockedRef.current) return;
+      const section = sectionRef.current;
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      const nearTop = rect.top > -vh * 0.9 && rect.top < vh * 0.9;
+      if (!nearTop) return;
+
+      if (rect.top <= 0 && progressRef.current < 1) {
+        snapAndLock();
+      } else if (rect.top > 0 && progressRef.current > 0) {
+        snapAndLock();
+      }
+    };
+
+    const handleWheel = (e) => {
+      if (!lockedRef.current) return; // deixa o scroll nativo normal (a entrada é detectada pelo listener de scroll acima)
+      e.preventDefault();
+      moveTarget(e.deltaY * WHEEL_SENSITIVITY);
+    };
+
+    const handleTouchStart = (e) => {
+      touchYRef.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      const currentY = e.touches[0].clientY;
+      const deltaY = touchYRef.current - currentY; // >0 = dedo sobe = scroll pra baixo
+      touchYRef.current = currentY;
+
+      if (!lockedRef.current) return; // deixa o touch nativo normal
+      e.preventDefault();
+      moveTarget(deltaY * TOUCH_SENSITIVITY);
     };
 
     const handleResize = () => {
       computeRadius();
-      handleScroll();
+      applyProgress(progressRef.current);
     };
 
-    handleScroll();
+    handleScroll(); // caso a página já carregue com a seção próxima do topo
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("resize", handleResize);
     return () => {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
+      unlockScroll();
     };
-  }, [isMobile]);
+  }, [isMobile, applyProgress]);
+
+  // Arraste (mouse) para o carrossel mobile — no touch o scroll nativo
+  // já funciona como "arrastar", então só tratamos ponteiro do mouse.
+  const handleDragStart = (e) => {
+    if (!isMobile || e.pointerType !== "mouse") return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    dragRef.current = { active: true, startX: e.clientX, startScroll: grid.scrollLeft };
+    grid.classList.add("dragging");
+    grid.setPointerCapture?.(e.pointerId);
+  };
+
+  const handleDragMove = (e) => {
+    if (!dragRef.current.active) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    const dx = e.clientX - dragRef.current.startX;
+    grid.scrollLeft = dragRef.current.startScroll - dx;
+  };
+
+  const handleDragEnd = (e) => {
+    if (!dragRef.current.active) return;
+    dragRef.current.active = false;
+    const grid = gridRef.current;
+    if (!grid) return;
+    grid.classList.remove("dragging");
+    try {
+      grid.releasePointerCapture?.(e.pointerId);
+    } catch {
+      // ignore
+    }
+  };
 
   return (
-    <div
-      className="cases-scroll-wrapper"
-      ref={wrapperRef}
-      style={
-        isMobile
-          ? undefined
-          : { height: `calc(100vh + ${CASES.length * SEGMENT_VH}vh)` }
-      }
-    >
-    <section className="cases">
+    <div className="cases-scroll-wrapper" ref={wrapperRef}>
+    <section className="cases" ref={sectionRef}>
       <div className="cases-header">
         <div>
           <p className="cases-eyebrow"></p>
@@ -191,7 +343,15 @@ export default function Cases() {
         <span className="cases-counter">{CASES.length} campanhas em destaque</span>
       </div>
 
-      <div className="cases-grid">
+      <div
+        className="cases-grid"
+        ref={gridRef}
+        onPointerDown={handleDragStart}
+        onPointerMove={handleDragMove}
+        onPointerUp={handleDragEnd}
+        onPointerLeave={handleDragEnd}
+        onPointerCancel={handleDragEnd}
+      >
         {CASES.map((c, i) => {
           const [venue, location] = c.local.split("—").map((s) => s.trim());
           return (

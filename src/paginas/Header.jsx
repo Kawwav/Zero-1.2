@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./Header.css";
 
-const SLIDES = ["1.jpg", "2.jpg"];
-const SLIDE_DURATION = 5000; // tempo de tela de cada imgem fundo
-
 export default function Header() {
   const screenRef = useRef(null);
   const logoRef = useRef(null);
   const animatedRef = useRef(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [heroVisible, setHeroVisible] = useState(false);
 
 
@@ -130,12 +126,6 @@ export default function Header() {
     };
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-    }, SLIDE_DURATION);
-    return () => clearInterval(timer);
-  }, []);
 
   return (
     <>
@@ -147,13 +137,14 @@ export default function Header() {
 
       <section className="hero">
         <div className="hero-bg">
-          {SLIDES.map((src, i) => (
-            <div
-              key={src}
-              className={`hero-slide${i === currentSlide ? " active" : ""}`}
-              style={{ backgroundImage: `url(${src})` }}
-            />
-          ))}
+          <video
+            className="hero-video"
+            src="./mercado.webm"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
 
         <div className="hero-overlay" />

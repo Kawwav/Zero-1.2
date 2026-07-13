@@ -256,6 +256,22 @@ export default function SobrePanel({ onClose }) {
   const [tooltip, setTooltip] = useState({ visible: false, uf: null, x: 0, y: 0 });
   const mapWrapRef = useRef(null);
 
+  // Trava o scroll da página (html + body) enquanto o painel estiver
+  // aberto — assim só existe UM scroll: o do próprio painel
+  // (.painel-conteudo). Feito aqui dentro (e não em quem chama o
+  // componente) pra funcionar não importa por onde o painel é aberto.
+  useEffect(() => {
+    const { documentElement: html, body } = document;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+    };
+  }, []);
+
   const activeStates = activeNetwork
     ? new Set(
       ALL_STATES.filter((uf) =>
