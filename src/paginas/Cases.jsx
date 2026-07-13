@@ -55,10 +55,8 @@ const MOBILE_BREAKPOINT = 780;
 export default function Cases() {
   const titleRef = useRef(null);
   const wrapperRef = useRef(null);
-  const gridRef = useRef(null);
   const cardRefs = useRef([]);
   const radiusRef = useRef(600);
-  const dragRef = useRef({ active: false, startX: 0, startScroll: 0 });
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth <= MOBILE_BREAKPOINT
   );
@@ -172,38 +170,6 @@ export default function Cases() {
     };
   }, [isMobile]);
 
-  // Arraste (mouse) para o carrossel mobile — no touch o scroll nativo
-  // já funciona como "arrastar", então só tratamos ponteiro do mouse.
-  const handleDragStart = (e) => {
-    if (!isMobile || e.pointerType !== "mouse") return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    dragRef.current = { active: true, startX: e.clientX, startScroll: grid.scrollLeft };
-    grid.classList.add("dragging");
-    grid.setPointerCapture?.(e.pointerId);
-  };
-
-  const handleDragMove = (e) => {
-    if (!dragRef.current.active) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    const dx = e.clientX - dragRef.current.startX;
-    grid.scrollLeft = dragRef.current.startScroll - dx;
-  };
-
-  const handleDragEnd = (e) => {
-    if (!dragRef.current.active) return;
-    dragRef.current.active = false;
-    const grid = gridRef.current;
-    if (!grid) return;
-    grid.classList.remove("dragging");
-    try {
-      grid.releasePointerCapture?.(e.pointerId);
-    } catch {
-      // ignore
-    }
-  };
-
   return (
     <div
       className="cases-scroll-wrapper"
@@ -225,15 +191,7 @@ export default function Cases() {
         <span className="cases-counter">{CASES.length} campanhas em destaque</span>
       </div>
 
-      <div
-        className="cases-grid"
-        ref={gridRef}
-        onPointerDown={handleDragStart}
-        onPointerMove={handleDragMove}
-        onPointerUp={handleDragEnd}
-        onPointerLeave={handleDragEnd}
-        onPointerCancel={handleDragEnd}
-      >
+      <div className="cases-grid">
         {CASES.map((c, i) => {
           const [venue, location] = c.local.split("—").map((s) => s.trim());
           return (
