@@ -83,6 +83,25 @@ export default function Footer() {
           </ul>
         </div>
       </div>
+
+      <div className="footer-rights">
+        © 2026 .Zero. Todos os direitos reservados.
+      </div>
+
+      <div className="footer-credit">
+        <span className="footer-credit-label">Feito por{" "}</span>
+        <a
+          href="https://kawwav.github.io/Kawwa/"
+          target="_blank"
+          rel="noreferrer"
+          className="footer-credit-link"
+        >
+          <RevealText
+            primary="Vinícius Kawasugui Santiago"
+            alt="Vinícius Kawasugui Santiago"
+          />
+        </a>
+      </div>
     </footer>
   );
 }
